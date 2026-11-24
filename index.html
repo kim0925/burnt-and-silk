@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#120b08" />
+  <meta name="description" content="BURNT & SILK — small-batch Basque burnt cheesecake, beautifully soft at heart. Based in Klang, Selangor." />
+  <title>BURNT & SILK | Basque Burnt Cheesecake</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:#1a110c; --deep:#120b08; --surface:#241812; --surface2:#2e2018;
+      --ink:#f3e7d6; --muted:#c2ab92; --caramel:#c9935a; --caramel-hi:#e0ad72;
+      --line:#45302a; --line-soft:#33241c;
+      --serif:'Cormorant Garamond',Georgia,'Times New Roman',serif;
+      --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
+    }
+    * { box-sizing:border-box }
+    html { scroll-behavior:smooth; background:var(--bg) }
+    body { margin:0; color:var(--ink); background:var(--bg); font-family:var(--sans); line-height:1.6 }
+    body::before { content:''; position:fixed; z-index:-1; inset:0; opacity:.08; pointer-events:none;
+      background-image: radial-gradient(#e0ad72 0.5px, transparent 0.5px); background-size:7px 7px }
+    a { color:inherit; text-decoration:none }
+    button, input, select, textarea { font:inherit }
+    button { cursor:pointer }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible,
+    textarea:focus-visible { outline:2px solid var(--caramel-hi); outline-offset:3px }
+    .skip { position:absolute; left:-9999px; top:0; background:var(--caramel); color:var(--deep); padding:8px; z-index:10 }
+    .skip:focus { left:12px }
+    .shell { width:min(1180px,calc(100% - 32px)); margin-inline:auto }
+    .topbar { position:sticky; top:0; z-index:20; background:rgba(18,11,8,.92);
+      backdrop-filter:blur(14px); box-shadow:0 1px 0 var(--line) }
+    .nav { display:flex; align-items:center; gap:20px; justify-content:space-between; min-height:80px }
+    .brand { display:flex; align-items:center; gap:10px; flex-shrink:0; color:var(--ink) }
+    .brand-mark { width:42px; height:34px; flex:none; color:var(--caramel) }
+    .brand-type { display:flex; flex-direction:column; line-height:1.0; gap:5px }
+    .brand-type strong { font:600 clamp(20px,2vw,26px)/1 var(--serif); letter-spacing:.06em }
+    .brand-type small { font-size:8px; letter-spacing:.26em; color:var(--muted) }
+    .links { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:clamp(10px,1.6vw,26px) }
+    .links a { font-size:13px; position:relative; white-space:nowrap; color:var(--muted); transition:color .2s }
+    .links a:hover, .links a.active { color:var(--ink) }
+    .links a.active::after { content:''; position:absolute; height:1px; left:0; right:0; bottom:-6px; background:var(--caramel) }
+    .actions { display:flex; align-items:center; gap:8px; flex-shrink:0 }
+    .btn { display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--caramel);
+      padding:12px 24px; background:transparent; color:var(--ink); border-radius:2px; font-size:13px; letter-spacing:.04em;
+      min-height:44px; transition:background .2s, color .2s, border-color .2s }
+    .btn:hover { background:rgba(201,147,90,.14) }
+    .btn-dark { color:var(--deep); background:var(--caramel); border-color:var(--caramel); font-weight:600 }
+    .btn-dark:hover { background:var(--caramel-hi); border-color:var(--caramel-hi); color:var(--deep) }
+    .btn-text { padding:8px 10px; min-height:40px; border-color:transparent }
+    .btn-text:hover { background:var(--surface2) }
+    .menu-toggle { display:none }
+    .page { display:none; min-height:calc(100vh - 300px) }
+    .page.active { display:block; animation:fadeIn .4s ease }
+    @keyframes fadeIn { from {opacity:0; transform:translateY(8px)} to {opacity:1;transform:translateY(0)} }
+    .eyebrow { text-transform:uppercase; letter-spacing:.26em; font-size:11px; font-weight:600; color:var(--caramel) }
+    h1,h2,h3 { font-family:var(--serif); line-height:1.05; font-weight:500; margin:0; color:var(--ink) }
+    h1 { font-size:clamp(46px,6.4vw,96px); letter-spacing:-.02em }
+    h2 { font-size:clamp(36px,4.2vw,60px); letter-spacing:-.015em }
+    h3 { font-size:clamp(24px,2.4vw,32px) }
+    p { margin:.8em 0 1.2em }
+    .lead { font-size:clamp(16px,1.7vw,19px); color:var(--muted); max-width:590px }
+    .hero { min-height:640px; display:grid; grid-template-columns:1fr 1.08fr; overflow:hidden;
+      background:linear-gradient(100deg,var(--deep) 0%,var(--bg) 55%) }
+    .hero-content { padding:clamp(48px,7vw,116px) clamp(20px,6vw,85px); display:flex;
+      justify-content:center; flex-direction:column }
+    .hero-content h1 { margin:16px 0 22px }
+    .hero-content h1 + .lead { font-family:var(--serif); font-style:italic; font-size:clamp(19px,2vw,24px) }
+    .hero-content .buttons { display:flex; flex-wrap:wrap; gap:12px; margin-top:22px }
+    .hero-visual { min-height:530px; position:relative; overflow:hidden;
+      background:radial-gradient(ellipse at 55% 42%,#7a4c30,#3a2217 55%,#140b07 100%); isolation:isolate }
+    .hero-visual::before { content:''; position:absolute; inset:0; opacity:.14;
+      background:repeating-radial-gradient(circle at 60% 42%,transparent 0 21px,#e0ad72 22px 23px) }
+    .hero-visual::after { content:''; position:absolute; inset:0;
+      background:linear-gradient(90deg,var(--deep) 0%,transparent 28%),linear-gradient(0deg,#0d0705cc 0%,transparent 35%) }
+    .cake-shadow { position:absolute; top:62%; left:50%; transform:translate(-50%,-50%);
+      width:74%; height:20%; border-radius:50%; filter:blur(35px); background:#0a0403d0 }
+    .cake { position:absolute; left:50%; top:47%; transform:translate(-50%,-50%) rotate(-8deg);
+      width:min(75%,440px); aspect-ratio:1.16; border-radius:50%;
+      background:radial-gradient(ellipse at 45% 42%,#1b110d 0 18%,#392015 30%,#6d3117 41%,#a95827 55%,#c17b3c 66%,#21130e 79%);
+      border:13px solid #d9a066; box-shadow:0 24px 0 #a8744c,0 46px 0 #e8cb9c,0 55px 40px #0a0503b0,
+      inset 0 1px 22px #130a07 }
+    .cake::before { content:''; position:absolute; inset:6%; border-radius:50%;
+      background:repeating-radial-gradient(ellipse at 38% 52%,#1c0d0b22 0 7px,#e47a2424 9px 20px,#1609063d 23px 30px); mix-blend-mode:overlay }
+    .visual-note { position:absolute; z-index:2; bottom:22px; right:26px; left:26px; text-align:right; color:#d9c6ae;
+      font:italic 14px var(--serif); opacity:.8 }
+    .usp { background:var(--surface); border-block:1px solid var(--line) }
+    .usp-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:0 }
+    .usp-grid div { padding:30px 20px; text-align:center; border-right:1px solid var(--line) }
+    .usp-grid div:last-child { border:0 }
+    .usp-grid strong { display:block; font:600 21px var(--serif); margin-bottom:4px; color:var(--caramel-hi) }
+    .usp-grid span { color:var(--muted); font-size:12px }
+    .section { padding:clamp(60px,7vw,110px) 0 }
+    .section-head { display:flex; justify-content:space-between; align-items:end; gap:24px; margin-bottom:36px }
+    .section-head p { max-width:510px; color:var(--muted) }
+    .section-head h1, .section-head h2 { margin-top:10px }
+    .flavour-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:18px }
+    .flavour-card { border:1px solid var(--line); background:var(--surface); overflow:hidden; transition:border-color .25s, transform .25s }
+    .flavour-card:hover { border-color:var(--caramel); transform:translateY(-3px) }
+    .flavour-art { height:220px; position:relative; overflow:hidden;
+      background:radial-gradient(circle at 50% 40%,#5a3a28,#20140e 75%) }
+    .flavour-art::before { content:''; position:absolute; left:50%; top:47%; transform:translate(-50%,-50%);
+      width:145px; height:116px; border-radius:42% 44% 24% 30%;
+      background:linear-gradient(180deg,#1b100b 0 16%,var(--filling,#e8c48a) 19% 89%,#5a3627 92%);
+      box-shadow:12px 17px 25px #0a0503a0; border:4px solid #a66c3f }
+    .flavour-art::after { content:''; position:absolute; width:125px;height:23px;left:50%;top:28%;transform:translate(-50%,-50%);
+      background:radial-gradient(ellipse,#1b100b 45%,#763c1e 60%,#b6743d 74%);border-radius:50% }
+    .flavour-art.matcha { --filling:#8c9c5e; background:radial-gradient(circle at 50% 40%,#4a4a2e,#1b170f 75%) }
+    .flavour-art.chocolate { --filling:#5e3321; background:radial-gradient(circle at 50% 40%,#5a3526,#1a0f0b 75%) }
+    .flavour-art.earlgrey { --filling:#cdbba4; background:radial-gradient(circle at 50% 40%,#544538,#1d1611 75%) }
+    .flavour-copy { padding:22px }
+    .flavour-copy h3 { margin-bottom:8px }
+    .flavour-copy p { color:var(--muted); font-size:13px; min-height:50px }
+    .split { display:grid; grid-template-columns:1fr 1fr; gap:clamp(28px,6vw,95px); align-items:center }
+    .split h1 { margin:10px 0 6px }
+    .dark-panel { background:var(--deep); color:var(--ink); padding:clamp(30px,6vw,80px); border:1px solid var(--line) }
+    .dark-panel p { color:var(--muted) }
+    .process { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-top:38px }
+    .process div { background:var(--surface); border:1px solid var(--line); padding:22px; min-height:170px }
+    .process b { font:600 30px var(--serif); color:var(--caramel) }
+    .process h3 { font-size:22px; margin:12px 0 }
+    .process p { font-size:12px; color:var(--muted) }
+    .story-image { min-height:420px; background:radial-gradient(circle at 48% 45%,#8a6446 0 12%,#4e3222 30%,#1d120c 70%);
+      display:grid; place-items:center; color:var(--ink); border:1px solid var(--line); outline:8px solid var(--surface); outline-offset:-9px }
+    .story-image span { font:italic clamp(30px,4vw,52px)/1.2 var(--serif); width:65%; text-align:center }
+    .form-panel { padding:30px; background:var(--surface); border:1px solid var(--line) }
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px }
+    .field { display:flex; flex-direction:column; gap:7px }
+    .field.full { grid-column:1/-1 }
+    .field label { font-size:12px; font-weight:600; color:var(--muted); letter-spacing:.03em }
+    .field input,.field select,.field textarea { border:1px solid var(--line); background:var(--deep);
+      padding:12px 13px; min-height:46px; border-radius:0; width:100%; color:var(--ink); color-scheme:dark }
+    .field input:focus,.field select:focus,.field textarea:focus { border-color:var(--caramel) }
+    .field textarea { min-height:105px; resize:vertical }
+    .mini { font-size:12px; color:var(--muted) }
+    .note { border-left:2px solid var(--caramel); background:var(--surface2); padding:14px 18px; font-size:13px }
+    #orderPreview { color:var(--ink) }
+    .faq { max-width:840px; margin-inline:auto }
+    .faq h1 { margin-top:10px }
+    .faq details { border-bottom:1px solid var(--line); padding:20px 0 }
+    .faq summary { cursor:pointer; font:500 24px var(--serif); list-style:none }
+    .faq summary::-webkit-details-marker { display:none }
+    .faq summary::after { content:'+'; float:right; color:var(--caramel) }
+    .faq details[open] summary::after { content:'−' }
+    .faq p { color:var(--muted); font-size:14px }
+    .cta-band { background:linear-gradient(180deg,var(--surface),var(--deep)); text-align:center; padding:64px 20px; border-top:1px solid var(--line) }
+    .cta-band h2 { margin:10px auto 22px; color:var(--caramel-hi) }
+    footer { background:var(--deep); color:var(--ink); padding:48px 0; border-top:1px solid var(--line) }
+    .foot { display:flex; justify-content:space-between; gap:30px; align-items:center; flex-wrap:wrap }
+    footer h3 { letter-spacing:.06em }
+    footer p { color:var(--muted); font-size:12px }
+    .status { min-height:20px; font-size:12px; color:#9fcf9f }
+    .hidden { display:none !important }
+    @media(max-width:960px) {
+      .nav { flex-wrap:wrap; min-height:70px; padding:10px 0 }
+      .menu-toggle { display:inline-flex }
+      .links { width:100%; order:4; display:none; padding:14px 0; justify-content:flex-start }
+      .links.open { display:flex }
+      .hero { grid-template-columns:1fr }
+      .hero-visual { min-height:380px; order:-1 }
+      .hero-visual::after { background:linear-gradient(0deg,var(--deep) 0%,transparent 40%) }
+      .hero-content { padding:40px 20px 56px }
+      .flavour-grid { grid-template-columns:repeat(2,1fr) }
+      .process { grid-template-columns:repeat(3,1fr) }
+    }
+    @media(max-width:610px) {
+      .shell { width:calc(100% - 32px) }
+      .brand-type strong { font-size:18px }
+      .brand-type small { font-size:6px }
+      .brand-mark { width:28px }
+      .actions { gap:3px }
+      .btn { padding:10px 16px }
+      .actions .order-short { display:none }
+      .usp-grid { grid-template-columns:repeat(2,1fr) }
+      .usp-grid div:nth-child(2) { border-right:0 }
+      .usp-grid div:nth-child(-n+2) { border-bottom:1px solid var(--line) }
+      .flavour-grid,.split,.form-grid { grid-template-columns:1fr }
+      .flavour-art { height:170px }
+      .process { grid-template-columns:1fr 1fr }
+      .section-head { display:block }
+      .field.full { grid-column:auto }
+      .hero-visual { min-height:320px }
+      .visual-note { font-size:12px }
+    }
+    /* real photos */
+    .hero-visual::before { display:none }
+    .hero-visual img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:62% center; z-index:-1 }
+    .flavour-img { display:block; width:100%; height:auto; aspect-ratio:3/2; object-fit:cover; border-bottom:1px solid var(--line) }
+    .story-photo img { display:block; width:100%; height:auto; border:1px solid var(--line) }
+    .wa-line { font:500 24px var(--serif); color:var(--caramel-hi); margin:.4em 0 1em }
+    .rules { list-style:none; padding:0; margin:18px 0 0; display:grid; gap:8px; font-size:13px; color:var(--muted) }
+    .rules li::before { content:'— '; color:var(--caramel) }
+    @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto !important; animation:none !important; transition:none !important } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main" data-i18n="skip">Skip to content</a>
+  <header class="topbar">
+    <nav class="nav shell" aria-label="Primary navigation">
+      <a class="brand" href="#home" aria-label="BURNT & SILK home">
+        <svg class="brand-mark" viewBox="0 0 72 56" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M8 37c6-9 5-16 10-23 9-10 28-8 37-2 5 7 3 19 8 26-18-5-38-7-55-1Z"/><path d="M10 39c17-3 36 0 54 2M21 15c8-4 18-3 24 0"/></svg>
+        <span class="brand-type"><strong>BURNT & SILK</strong><small>BASQUE CHEESECAKE STUDIO</small></span>
+      </a>
+      <div id="navLinks" class="links">
+        <a href="#home" data-nav="home" data-i18n="navHome">Home</a>
+        <a href="#flavours" data-nav="flavours" data-i18n="navFlavours">Flavours</a>
+        <a href="#experience" data-nav="experience" data-i18n="navExperience">Experience</a>
+        <a href="#story" data-nav="story" data-i18n="navStory">Our Story</a>
+        <a href="#faqs" data-nav="faqs" data-i18n="navFaq">FAQs</a>
+        <a href="#contact" data-nav="contact" data-i18n="navContact">Contact</a>
+      </div>
+      <div class="actions">
+        <button class="btn btn-text" id="langToggle" type="button" aria-label="Switch language">中文</button>
+        <a class="btn btn-dark" href="#order"><span class="order-short" data-i18n="orderEnquiry">Order enquiry</span><span aria-hidden="true"> ↗</span></a>
+        <button class="btn btn-text menu-toggle" id="menuToggle" type="button" aria-controls="navLinks" aria-expanded="false">☰</button>
+      </div>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="page active" id="home">
+      <div class="hero">
+        <div class="hero-content">
+          <span class="eyebrow" data-i18n="heroEyebrow">Small-batch Basque cheesecake</span>
+          <h1 data-i18n="heroTitle">Boldly burnt.<br>Beautifully soft.</h1>
+          <p class="lead" data-i18n="heroDesc">A deeply caramelised top and a rich, silky centre.</p>
+          <div class="buttons"><a class="btn btn-dark" href="#flavours" data-i18n="explore">Explore flavours</a><a class="btn" href="#order" data-i18n="planOrder">Plan your order</a></div>
+        </div>
+        <div class="hero-visual"><img src="img/hero.jpg" alt="Basque burnt cheesecake with a slice cut out, showing the caramelised top and creamy centre" width="1536" height="1024" fetchpriority="high"></div>
+      </div>
+      <div class="usp"><div class="shell usp-grid">
+        <div><strong data-i18n="usp1">Premium ingredients</strong><span data-i18n="usp1d">Selected with care</span></div>
+        <div><strong data-i18n="usp2">Small-batch baking</strong><span data-i18n="usp2d">Made in limited quantities</span></div>
+        <div><strong data-i18n="usp3">Authentically burnt</strong><span data-i18n="usp3d">Caramelised flavour</span></div>
+        <div><strong data-i18n="usp4">Made to order</strong><span data-i18n="usp4d">Plan ahead with an enquiry</span></div>
+      </div></div>
+      <div class="shell section">
+        <div class="section-head"><div><span class="eyebrow" data-i18n="theMenu">The menu</span><h2 data-i18n="findFlavour">Find your flavour.</h2></div><p data-i18n="menuIntro">Original, Matcha, Chocolate and Earl Grey. Four expressions of one burnt, silky idea.</p></div>
+        <div id="homeFlavours" class="flavour-grid"></div>
+      </div>
+      <div class="cta-band"><span class="eyebrow" data-i18n="sixInch">6-inch whole cheesecake</span><h2 data-i18n="from80">From RM80</h2><a class="btn btn-dark" href="#order" data-i18n="orderEnquiry">Order enquiry</a></div>
+    </section>
+
+    <section class="page shell section" id="flavours">
+      <div class="section-head"><div><span class="eyebrow" data-i18n="theMenu">The menu</span><h1 data-i18n="flavoursHeading">Our flavours.</h1></div><p class="lead" data-i18n="flavoursDesc">The same burnt soul, different expressions.</p></div>
+      <div class="flavour-grid" id="allFlavours"></div>
+      <p class="mini" data-i18n="priceDisclaimer">RM80 is a historical starting price for a 6-inch whole cheesecake. Final flavour prices and availability require confirmation.</p>
+    </section>
+
+    <section class="page" id="experience">
+      <div class="shell section"><span class="eyebrow" data-i18n="experienceLabel">The experience</span><h1 data-i18n="experienceHeading">From simple ingredients to a beautiful burn.</h1><p class="lead" data-i18n="experienceText">Explore the craft behind the caramelised surface and smooth centre.</p><div class="process" id="processSteps"></div></div>
+    </section>
+
+    <section class="page shell section" id="story">
+      <div class="split"><div><span class="eyebrow" data-i18n="storyLabel">Our story</span><h1 data-i18n="storyHeading">Born from a love for contrasts.</h1><p class="lead" data-i18n="storyText">A Basque cheesecake should be bold on the outside and silky within. BURNT & SILK is built around this simple idea, with an emphasis on small-batch baking and thoughtful flavour.</p><a href="#order" class="btn btn-dark" data-i18n="planOrder">Plan your order</a></div><div class="story-photo"><img src="img/story.jpg" alt="Hands unwrapping a freshly baked Basque burnt cheesecake from its parchment" loading="lazy" width="1200" height="900"></div></div>
+    </section>
+
+    <section class="page shell section" id="order">
+      <div class="section-head"><div><span class="eyebrow" data-i18n="orderEnquiry">Order enquiry</span><h1 data-i18n="orderHeading">Plan your order.</h1></div><p data-i18n="orderIntro">Choose a flavour and date, then prepare an enquiry. This is not a confirmed order or payment.</p></div>
+      <div class="split" style="align-items:start">
+        <form class="form-panel" id="orderForm">
+          <div class="form-grid">
+            <div class="field"><label for="flavour" data-i18n="formFlavour">Flavour</label><select id="flavour" name="flavour" required></select></div>
+            <div class="field"><label for="size" data-i18n="formSize">Size</label><select id="size" name="size"><option value="6-inch">6-inch whole cheesecake</option></select></div>
+            <div class="field"><label for="date" data-i18n="formDate">Preferred date</label><input type="date" id="date" name="date" required /></div>
+            <div class="field"><label for="delivery" data-i18n="formFulfilment">Collection / delivery preference</label><select id="delivery" name="delivery"><option value="Pickup">Self-pickup (subject to confirmation)</option><option value="Delivery">Delivery (subject to confirmation)</option></select></div>
+            <div class="field"><label for="payMethod" data-i18n="formPayment">Preferred payment method (enquiry only)</label><select id="payMethod" name="payMethod"><option value="TnG">Touch 'n Go</option><option value="FPX">FPX</option><option value="Card">Card</option><option value="Discuss">Discuss with seller</option></select></div>
+            <div class="field"><label for="customerName" data-i18n="formName">Your name</label><input id="customerName" name="customerName" autocomplete="name" maxlength="80" required /></div>
+            <div class="field full"><label for="notes" data-i18n="formNotes">Special notes (optional)</label><textarea id="notes" name="notes" maxlength="900" placeholder=""></textarea></div>
+          </div>
+          <p class="mini" data-i18n="noCheckout">No live checkout or payment gateway is connected. Submission only prepares a message for you to copy.</p>
+          <button class="btn btn-dark" type="submit" data-i18n="prepareEnquiry">Prepare enquiry message</button>
+        </form>
+        <div class="form-panel" aria-live="polite"><span class="eyebrow" data-i18n="orderSummary">Enquiry summary</span><h3 data-i18n="notAnOrder">Not an order confirmation</h3><p class="mini" data-i18n="summaryHelp">Use the form to generate a message. Contact details must be supplied through the actual verified business channel.</p><pre id="orderPreview" style="white-space:pre-wrap;word-break:break-word;font:13px/1.8 var(--sans)"></pre><button id="copyOrder" class="btn hidden" type="button" data-i18n="copyMessage">Copy enquiry message</button><p id="copyStatus" class="status"></p></div>
+      </div>
+    </section>
+
+    <section class="page shell section" id="faqs">
+      <div class="faq"><span class="eyebrow" data-i18n="faqsLabel">Useful information</span><h1 data-i18n="faqHeading">Frequently asked questions.</h1><div id="faqList" style="margin-top:30px"></div></div>
+    </section>
+
+    <section class="page shell section" id="contact">
+      <div class="split"><div><span class="eyebrow" data-i18n="contactLabel">Contact</span><h1 data-i18n="contactHeading">Get in touch.</h1><p class="lead" data-i18n="contactIntro">For flavour questions, dates or special requests, use the enquiry form and your verified business contact channel.</p><a class="btn btn-dark" href="#order" data-i18n="orderEnquiry">Order enquiry</a></div><div class="dark-panel"><h3>BURNT & SILK</h3><p>Klang, Selangor, Malaysia</p><p class="wa-line">+60 18-306 2738</p><a class="btn btn-dark" href="https://wa.me/60183062738" target="_blank" rel="noopener" data-i18n="waChat">WhatsApp us</a><ul class="rules"><li data-i18n="rule1">Order at least 3 days ahead</li><li data-i18n="rule2">Self-pickup in Klang, or Lalamove delivery</li><li data-i18n="rule3">Best within 3 days, keeps up to 5 days chilled</li></ul></div></div>
+    </section>
+  </main>
+  <footer><div class="shell foot"><div><h3>BURNT & SILK</h3><p data-i18n="footTag">Boldly burnt. Beautifully soft.</p><p>© <span id="year"></span> BURNT & SILK</p></div><div><p>Klang · Selangor · Malaysia</p><p data-i18n="footerNotice">Reference reconstruction only. Not an authorised live ordering site.</p></div></div></footer>
+  <script>
+    // Orders go to WhatsApp as a prefilled message. No payment or customer data is processed on this site.
+    const dictionaries = {
+      en: {
+        skip:'Skip to content', navHome:'Home',navFlavours:'Flavours',navExperience:'Experience',navStory:'Our story',navFaq:'FAQs',navContact:'Contact',
+        orderEnquiry:'Order enquiry',heroEyebrow:'SMALL-BATCH BASQUE CHEESECAKE',heroTitle:'Boldly burnt.<br>Beautifully soft.',
+        heroDesc:'A deeply caramelised top and a rich, silky centre.',explore:'Explore flavours',planOrder:'Plan your order',
+        conceptArt:'Illustrative cheesecake artwork · replace with a real product photo',
+        usp1:'Premium ingredients',usp1d:'Selected with care',usp2:'Small-batch baking',usp2d:'Made in limited quantities',
+        usp3:'Authentically burnt',usp3d:'Caramelised flavour',usp4:'Made to order',usp4d:'Order 3 days ahead',
+        theMenu:'THE MENU',findFlavour:'Find your flavour.',menuIntro:'Original, Matcha, Chocolate and Earl Grey. Four expressions of one burnt, silky idea.',
+        sixInch:'6-INCH WHOLE CHEESECAKE',from80:'From RM80',flavoursHeading:'Our flavours.',flavoursDesc:'The same burnt soul, different expressions.',
+        priceDisclaimer:'Every cake is a 6-inch whole cheesecake, from RM80. We confirm the price of your flavour on WhatsApp.',
+        experienceLabel:'THE EXPERIENCE',experienceHeading:'From simple ingredients to a beautiful burn.',experienceText:'Explore the craft behind the caramelised surface and smooth centre.',
+        storyLabel:'OUR STORY',storyHeading:'Born from a love for contrasts.',storyText:'A Basque cheesecake should be bold on the outside and silky within. BURNT & SILK is built around this simple idea, with an emphasis on small-batch baking and thoughtful flavour.',
+        orderHeading:'Plan your order.',orderIntro:'Choose your flavour and a date at least 3 days ahead. Your enquiry opens in WhatsApp, where we confirm the date, price and payment.',
+        formFlavour:'Flavour',formSize:'Size',formDate:'Pickup / delivery date',formFulfilment:'Pickup or delivery',formPayment:'Preferred payment method',formName:'Your name',formNotes:'Notes (address for delivery, allergies, message card…)',
+        noCheckout:'No payment is taken on this site. We reply on WhatsApp to confirm your order.',
+        prepareEnquiry:'Send enquiry on WhatsApp',orderSummary:'Your enquiry',notAnOrder:'Confirmed once we reply',summaryHelp:'If WhatsApp does not open, copy this message and send it to +60 18-306 2738.',
+        copyMessage:'Copy enquiry message',copied:'Message copied.',copyManually:'Copy is unavailable. Please select and copy the text.',
+        faqsLabel:'USEFUL INFORMATION',faqHeading:'Frequently asked questions.',contactLabel:'CONTACT',contactHeading:'Get in touch.',
+        contactIntro:'For flavours, dates or gifting, message us on WhatsApp.',
+        waChat:'WhatsApp us',rule1:'Order at least 3 days ahead',rule2:'Self-pickup in Klang, or Lalamove delivery',rule3:'Best within 3 days, keeps up to 5 days chilled',
+        footTag:'Boldly burnt. Beautifully soft.',footerNotice:'Made to order in Klang · Please order 3 days ahead',
+        pickup:'Self-pickup in Klang', delivery:'Lalamove delivery (fee at actual cost)',
+        flavourDetails:[['Original','Classic, rich and beautifully balanced.'],['Matcha','Earthy, fragrant and indulgent.'],['Chocolate','Deep, bold and velvety.'],['Earl Grey','Aromatic, smooth and refined.']],
+        steps:[['01','Ingredients','Thoughtfully chosen for quality.'],['02','Mix','Gently combined for a smooth batter.'],['03','Prepare','Made with care in small batches.'],['04','Bake','Deeply caramelised at the surface.'],['05','Reveal','Bold on top. Silky at heart.']],
+        faqs:[['How far ahead should I order?','At least 3 days before your pickup or delivery date. We bake in small batches, so dates can fill up.'],
+          ['How do I order?','Fill in the order form and send it on WhatsApp, or message us directly at +60 18-306 2738. We reply to confirm your date and price.'],
+          ['Pickup or delivery?','Both. Self-pickup is in Klang. Delivery is by Lalamove, and the delivery fee depends on distance and is charged at actual cost.'],
+          ['How long does the cheesecake keep?','Keep it refrigerated. It is best enjoyed within 3 days and keeps for up to 5 days.'],
+          ['How do I pay?','After we confirm your order on WhatsApp, we send you the payment details. No payment is taken on this website.']]
+      },
+      zh: {
+        skip:'跳至内容',navHome:'首页',navFlavours:'口味',navExperience:'制作体验',navStory:'品牌故事',navFaq:'常见问题',navContact:'联系我们',
+        orderEnquiry:'预订咨询',heroEyebrow:'小批量巴斯克芝士蛋糕',heroTitle:'焦香浓烈。<br>柔滑如丝。',
+        heroDesc:'深度焦糖化的表面，浓郁柔顺的内心。',explore:'探索口味',planOrder:'计划预订',
+        conceptArt:'芝士蛋糕概念插画 · 正式网站应换成真实产品照片',
+        usp1:'精选食材',usp1d:'用心挑选',usp2:'小批量制作',usp2d:'限量烘焙',usp3:'迷人焦香',usp3d:'鲜明焦糖化风味',usp4:'按需求制作',usp4d:'请提前 3 天预订',
+        theMenu:'品牌菜单',findFlavour:'发现你的口味。',menuIntro:'原味、抹茶、巧克力与伯爵茶。四种风味，同样焦香柔滑。',
+        sixInch:'6英寸整颗芝士蛋糕',from80:'RM80 起',flavoursHeading:'我们的口味。',flavoursDesc:'相同的焦香灵魂，各有不同的表达。',
+        priceDisclaimer:'均为 6 寸整颗芝士蛋糕，RM80 起。各口味的价格会在 WhatsApp 上和你确认。',
+        experienceLabel:'制作体验',experienceHeading:'简单食材，成就迷人焦香。',experienceText:'从食材到烘烤，一起探索焦香外表与丝滑内心。',
+        storyLabel:'品牌故事',storyHeading:'因热爱对比而生。',storyText:'巴斯克芝士蛋糕应当拥有大胆焦香的表面和柔滑的内部。BURNT & SILK 围绕这个理念，强调小批量制作和精心选择的风味。',
+        orderHeading:'计划你的预订。',orderIntro:'选择口味和日期（至少提前 3 天）。提交后会打开 WhatsApp，我们会在那里确认日期、价格和付款方式。',
+        formFlavour:'口味',formSize:'尺寸',formDate:'取货／送货日期',formFulfilment:'自取或送货',formPayment:'付款方式偏好',formName:'你的名字',formNotes:'备注（送货地址、过敏、贺卡内容等）',
+        noCheckout:'本网站不收款。我们会在 WhatsApp 回复并确认订单。',
+        prepareEnquiry:'通过 WhatsApp 发送预订',orderSummary:'你的预订信息',notAnOrder:'我们回复后即确认',summaryHelp:'如果 WhatsApp 没有自动打开，请复制以下信息，发送到 +60 18-306 2738。',
+        copyMessage:'复制咨询信息',copied:'已复制。',copyManually:'无法自动复制，请手动选择文字复制。',
+        faqsLabel:'相关信息',faqHeading:'常见问题。',contactLabel:'联系我们',contactHeading:'欢迎联系。',
+        contactIntro:'口味、档期或送礼需求，欢迎 WhatsApp 联系我们。',
+        waChat:'WhatsApp 联系我们',rule1:'请至少提前 3 天预订',rule2:'巴生自取，或 Lalamove 送货',rule3:'3 天内风味最佳，冷藏可保存 5 天',
+        footTag:'Boldly burnt. Beautifully soft.',footerNotice:'巴生手工现做 · 请提前 3 天预订',
+        pickup:'巴生自取',delivery:'Lalamove 送货（运费按实际收取）',
+        flavourDetails:[['Original 原味','经典浓郁，平衡柔滑。'],['Matcha 抹茶','清雅茶香，浓郁满足。'],['Chocolate 巧克力','深邃浓厚，柔润细腻。'],['Earl Grey 伯爵茶','香气优雅，口感柔顺。']],
+        steps:[['01','食材','悉心挑选品质原料。'],['02','混合','轻柔拌匀，形成细腻面糊。'],['03','准备','小批量用心制作。'],['04','烘烤','表面深度焦糖化。'],['05','揭晓','焦香外表，柔滑内心。']],
+        faqs:[['需要提前多久预订？','请在取货或送货日期至少 3 天前预订。我们小批量制作，档期可能会满。'],
+          ['如何预订？','填写预订表格并通过 WhatsApp 发送，或直接 WhatsApp +60 18-306 2738。我们会回复确认日期和价格。'],
+          ['可以自取或送货吗？','都可以。自取地点在巴生；送货使用 Lalamove，运费按距离实际收取。'],
+          ['芝士蛋糕可以保存多久？','请冷藏保存。3 天内享用风味最佳，最多可保存 5 天。'],
+          ['怎么付款？','我们在 WhatsApp 确认订单后，会发送付款资料给你。本网站不收取任何款项。']]
+      }
+    };
+    const safe = (v) => String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    let lang = 'en'; try { if (localStorage.getItem('bs_lang') === 'zh') lang = 'zh'; } catch (e) {}
+    const get = () => dictionaries[lang];
+    const ids = ['home','flavours','experience','story','order','faqs','contact'];
+    function route() {
+      const hash = decodeURIComponent(location.hash.replace(/^#/,''));
+      const id = ids.includes(hash) ? hash : 'home';
+      document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));
+      document.querySelectorAll('[data-nav]').forEach(a=>{
+        const active = a.dataset.nav===id; a.classList.toggle('active',active);
+        if (active) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current');
+      });
+      document.getElementById('navLinks').classList.remove('open');
+      document.getElementById('menuToggle').setAttribute('aria-expanded','false');
+      window.scrollTo({top:0,behavior:'instant'});
+    }
+    function flavourCards() {
+      return get().flavourDetails.map(([name,desc],i)=>`<article class="flavour-card"><img class="flavour-img" src="img/${['original','matcha','chocolate','earlgrey'][i]}.jpg" alt="${safe(name)} Basque burnt cheesecake slice" loading="lazy" width="760" height="504"><div class="flavour-copy"><h3>${safe(name)}</h3><p>${safe(desc)}</p><a class="btn" href="#order">${safe(get().orderEnquiry)} →</a></div></article>`).join('');
+    }
+    function render() {
+      document.documentElement.lang=lang==='zh'?'zh-CN':'en';
+      const d=get();
+      document.querySelectorAll('[data-i18n]').forEach(el=>{
+        if (['heroTitle'].includes(el.dataset.i18n)) el.innerHTML=d[el.dataset.i18n];
+        else el.textContent=d[el.dataset.i18n] || '';
+      });
+      document.getElementById('langToggle').textContent=lang==='en'?'中文':'EN';
+      document.getElementById('homeFlavours').innerHTML=flavourCards();
+      document.getElementById('allFlavours').innerHTML=flavourCards();
+      const selector=document.getElementById('flavour'),old=selector.value;
+      selector.innerHTML=d.flavourDetails.map(([name],i)=>`<option value="${['Original','Matcha','Chocolate','Earl Grey'][i]}">${safe(name)}</option>`).join('');
+      if(old) selector.value=old;
+      document.getElementById('processSteps').innerHTML=d.steps.map(([num,title,desc])=>`<div><b>${num}</b><h3>${safe(title)}</h3><p>${safe(desc)}</p></div>`).join('');
+      document.getElementById('faqList').innerHTML=d.faqs.map(([q,a])=>`<details><summary>${safe(q)}</summary><p>${safe(a)}</p></details>`).join('');
+      const delivery=document.getElementById('delivery');
+      [...delivery.options].forEach((opt,i)=>opt.textContent=i===0?d.pickup:d.delivery);
+      document.title=(lang==='zh'?'BURNT & SILK | 巴斯克芝士蛋糕':'BURNT & SILK | Basque Burnt Cheesecake');
+    }
+    document.getElementById('langToggle').addEventListener('click',()=>{
+      lang=lang==='en'?'zh':'en'; try { localStorage.setItem('bs_lang',lang); } catch (e) {} render();
+    });
+    document.getElementById('menuToggle').addEventListener('click',()=>{
+      const nav=document.getElementById('navLinks');
+      const open=nav.classList.toggle('open');document.getElementById('menuToggle').setAttribute('aria-expanded',String(open));
+    });
+    window.addEventListener('hashchange',route);
+    document.getElementById('year').textContent=new Date().getFullYear();
+    const localToday = () => { const d=new Date(),tz=d.getTimezoneOffset(); return new Date(d.getTime()-tz*60000).toISOString().slice(0,10); };
+    const earliest = () => { const d=new Date(); d.setDate(d.getDate()+3); const tz=d.getTimezoneOffset(); return new Date(d.getTime()-tz*60000).toISOString().slice(0,10); };
+    document.getElementById('date').min=earliest();
+    const WA='60183062738';
+    let message='';
+    document.getElementById('orderForm').addEventListener('submit',(e)=>{
+      e.preventDefault();
+      const form=e.currentTarget;
+      if(!form.reportValidity())return;
+      const fields = new FormData(form);
+      message=[
+        "Hi BURNT & SILK, I'd like to pre-order:",
+        `Name: ${fields.get('customerName')}`,
+        `Flavour: ${fields.get('flavour')}`,
+        `Size: ${fields.get('size')}`,
+        `Date: ${fields.get('date')}`,
+        `Pickup / delivery: ${fields.get('delivery')==='Delivery'?'Lalamove delivery':'Self-pickup in Klang'}`,
+        `Payment preference: ${fields.get('payMethod')}`,
+        `Notes: ${fields.get('notes') || '-'}`
+      ].join('\n');
+      document.getElementById('orderPreview').textContent=message;
+      document.getElementById('copyOrder').classList.remove('hidden');
+      document.getElementById('copyStatus').textContent='';
+      window.open(`https://wa.me/${WA}?text=${encodeURIComponent(message)}`,'_blank','noopener');
+    });
+    document.getElementById('copyOrder').addEventListener('click',async()=>{
+      try{await navigator.clipboard.writeText(message);document.getElementById('copyStatus').textContent=get().copied;}
+      catch{document.getElementById('copyStatus').textContent=get().copyManually;}
+    });
+    render();route();
+  </script>
+</body>
+</html>
